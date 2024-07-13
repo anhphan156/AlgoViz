@@ -1,6 +1,6 @@
 CC := gcc
 CFLAGS := -g
-LDFLAGS := -lm
+LDFLAGS := -lm -lxkbcommon -lraylib
 
 SRCDIR := src
 BUILDDIR := build
@@ -23,6 +23,9 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.c
 
 run:
 	./out
+
+leak:
+	valgrind --leak-check=full ./out
 
 clean:
 	rm -rf $(BUILDDIR)/%.o $(EXECUTABLE)

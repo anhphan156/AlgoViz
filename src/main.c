@@ -1,8 +1,8 @@
-#include "test.h"
-#include <stdio.h>
+#include "game.h"
 
 int main() {
-  printf("main\n");
-  hello();
+  Init();
+  Run();
+  Cleanup();
   return 0;
 }
