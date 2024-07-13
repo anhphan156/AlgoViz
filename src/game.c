@@ -11,7 +11,7 @@ void Init() {
 }
 
 void Run() {
-  int len = 100;
+  int len = 50;
   int *arr = alloca(sizeof(int) * len);
   int *arr_sort = alloca(sizeof(int) * len);
   srand(time(0));
@@ -27,21 +27,21 @@ void Run() {
   Vector2 pos = {WIDTH / 3.0, HEIGHT / 3.0};
   float col_width = (float)WIDTH / (float)len;
 
-  float default_cd = 1.0f / len;
-  float cd = cd;
+  float default_cd = 1.0f / (len * 50.0f);
+  float cd = default_cd;
   while (!WindowShouldClose()) {
 
     BeginDrawing();
     ClearBackground(SKYBLUE);
 
-    if (cd <= 0.0f && step_queue_empty()) {
+    if (cd <= 0.0f && !step_queue_empty()) {
       cd = default_cd;
       int a, b;
       step_dequeue(&a, &b);
       if (arr[a] != arr[b]) {
-        arr[a] = arr[a] ^ arr[b];
-        arr[b] = arr[a] ^ arr[b];
-        arr[a] = arr[a] ^ arr[b];
+        arr[a] ^= arr[b];
+        arr[b] ^= arr[a];
+        arr[a] ^= arr[b];
       }
     }
 

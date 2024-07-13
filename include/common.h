@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const int WIDTH = 800;
-const int HEIGHT = 600;
-const int FR = 60;
+#define WIDTH 1200
+#define HEIGHT 600
+#define FR 60
 
 #endif

@@ -42,9 +42,4 @@ void step_queue_cleanup() {
   }
 }
 
-char step_queue_empty() {
-  if (tail == 0) {
-    return 0;
-  }
-  return 1;
-}
+char step_queue_empty() { return tail == 0; }
