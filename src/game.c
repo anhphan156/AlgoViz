@@ -21,18 +21,12 @@ void Run() {
   }
   insertion_sort(arr_sort, len);
 
-  float r = 30.0f;
   Color c = {255, 0, 0, 255};
-  Vector2 circle_pos = {WIDTH / 2.0, HEIGHT / 2.0};
-  Vector2 pos = {WIDTH / 3.0, HEIGHT / 3.0};
   float col_width = (float)WIDTH / (float)len;
 
   float default_cd = 1.0f / (len * 50.0f);
   float cd = default_cd;
   while (!WindowShouldClose()) {
-
-    BeginDrawing();
-    ClearBackground(SKYBLUE);
 
     if (cd <= 0.0f && !step_queue_empty()) {
       cd = default_cd;
@@ -44,13 +38,14 @@ void Run() {
         arr[a] ^= arr[b];
       }
     }
+    cd -= 1.0 / FR;
 
+    BeginDrawing();
+    ClearBackground(SKYBLUE);
     for (int i = 0; i < len; i += 1) {
       DrawRectangle(i * col_width, HEIGHT - arr[i], col_width, arr[i], c);
     }
-
     EndDrawing();
-    cd -= 1.0 / FR;
   }
 
   CloseWindow();
