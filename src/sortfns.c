@@ -9,9 +9,8 @@ void swap(int *a, int *b) {
   }
 }
 
-Step *insertion_sort(int *arr, int len) {
+void insertion_sort(int *arr, int len) {
   int tmp, j;
-  Step *step;
   for (int i = 1; i < len; i += 1) {
     tmp = arr[i];
     j = i - 1;
@@ -22,15 +21,11 @@ Step *insertion_sort(int *arr, int len) {
     }
     arr[j + 1] = tmp;
   }
-
-  return step;
 }
 
-Step *quick_sort(int *arr, int len, int step_offset) {
-  Step *step;
-
+void quick_sort(int *arr, int len, int step_offset) {
   if (len <= 1)
-    return (void *)0;
+    return;
 
   int j = -1;
   int pivot = arr[len - 1];
@@ -51,6 +46,19 @@ Step *quick_sort(int *arr, int len, int step_offset) {
 
   quick_sort(arr, j, step_offset);
   quick_sort(arr + j + 1, len - j - 1, step_offset + j + 1);
+}
 
-  return step;
+void selection_sort(int *arr, int len) {
+  int min_loc;
+
+  for (int i = 0; i < len; i += 1) {
+    min_loc = i;
+    for (int j = i; j < len; j += 1) {
+      if (arr[j] < arr[min_loc])
+        min_loc = j;
+    }
+    swap(arr + i, arr + min_loc);
+    if (i != min_loc)
+      step_enqueue(i, min_loc);
+  }
 }

@@ -19,17 +19,9 @@ void Run() {
     arr[i] = rand() % HEIGHT;
     arr_sort[i] = arr[i];
   }
-  /*quick_sort(arr_sort, len, 0);*/
-  insertion_sort(arr_sort, len);
-
-  /*int a, b;*/
-  /*printf("\n");*/
-  /*while (!step_queue_empty()) {*/
-  /*  step_dequeue(&a, &b);*/
-  /*  printf("%d %d\n", a, b);*/
-  /*}*/
-  /**/
-  /*CloseWindow();*/
+  quick_sort(arr_sort, len, 0);
+  /*insertion_sort(arr_sort, len);*/
+  /*selection_sort(arr_sort, len);*/
 
   Color c = {255, 0, 0, 255};
   Color c_blue = {0, 0, 255, 100};
