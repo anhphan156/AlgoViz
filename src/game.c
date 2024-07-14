@@ -35,7 +35,7 @@ void Run() {
   Color c_blue = {0, 0, 255, 100};
   float col_width = (float)WIDTH / (float)len;
 
-  float default_cd = 1.0f / (len * 50.0f);
+  float default_cd = 1.0f / (len * 100.0f);
   /*float default_cd = 1.0f;*/
   float cd = default_cd;
   while (!WindowShouldClose()) {

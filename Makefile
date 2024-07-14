@@ -19,6 +19,7 @@ $(EXECUTABLE): $(OBJS)
 	$(CC) $(LDFLAGS) $^ -o $@
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(BUILDDIR)
 	$(CC) $(CFLAGS) -I$(INCDIR) -c $^ -o $@
 
 run:
@@ -28,4 +29,4 @@ leak:
 	valgrind --leak-check=full ./out
 
 clean:
-	rm -rf $(BUILDDIR)/%.o $(EXECUTABLE)
+	rm -rf $(BUILDDIR)/*.o $(EXECUTABLE)
