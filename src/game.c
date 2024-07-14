@@ -11,7 +11,7 @@ void Init() {
 }
 
 void Run() {
-  int len = 50;
+  int len = 100;
   int *arr = alloca(sizeof(int) * len);
   int *arr_sort = alloca(sizeof(int) * len);
   srand(time(0));
@@ -19,12 +19,24 @@ void Run() {
     arr[i] = rand() % HEIGHT;
     arr_sort[i] = arr[i];
   }
-  insertion_sort(arr_sort, len);
+  quick_sort(arr_sort, len, 0);
+  /*insertion_sort(arr_sort, len);*/
+
+  /*int a, b;*/
+  /*printf("\n");*/
+  /*while (!step_queue_empty()) {*/
+  /*  step_dequeue(&a, &b);*/
+  /*  printf("%d %d\n", a, b);*/
+  /*}*/
+  /**/
+  /*CloseWindow();*/
 
   Color c = {255, 0, 0, 255};
+  Color c_blue = {0, 0, 255, 100};
   float col_width = (float)WIDTH / (float)len;
 
   float default_cd = 1.0f / (len * 50.0f);
+  /*float default_cd = 1.0f;*/
   float cd = default_cd;
   while (!WindowShouldClose()) {
 
@@ -44,6 +56,8 @@ void Run() {
     ClearBackground(SKYBLUE);
     for (int i = 0; i < len; i += 1) {
       DrawRectangle(i * col_width, HEIGHT - arr[i], col_width, arr[i], c);
+      DrawRectangle(i * col_width, HEIGHT - arr_sort[i], col_width, arr_sort[i],
+                    c_blue);
     }
     EndDrawing();
   }
