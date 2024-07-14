@@ -19,8 +19,8 @@ void Run() {
     arr[i] = rand() % HEIGHT;
     arr_sort[i] = arr[i];
   }
-  quick_sort(arr_sort, len, 0);
-  /*insertion_sort(arr_sort, len);*/
+  /*quick_sort(arr_sort, len, 0);*/
+  insertion_sort(arr_sort, len);
 
   /*int a, b;*/
   /*printf("\n");*/

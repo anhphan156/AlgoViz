@@ -39,13 +39,15 @@ Step *quick_sort(int *arr, int len, int step_offset) {
     if (arr[i] < pivot) {
       j += 1;
       swap(arr + j, arr + i);
-      step_enqueue(j + step_offset, i + step_offset);
+      if (i != j)
+        step_enqueue(j + step_offset, i + step_offset);
     }
   }
 
   j += 1;
   swap(arr + len - 1, arr + j);
-  step_enqueue(j + step_offset, len - 1 + step_offset);
+  if (len - 1 != j)
+    step_enqueue(j + step_offset, len - 1 + step_offset);
 
   quick_sort(arr, j, step_offset);
   quick_sort(arr + j + 1, len - j - 1, step_offset + j + 1);
