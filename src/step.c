@@ -4,6 +4,9 @@
 Step *head, *tail;
 
 void step_enqueue(int a, int b) {
+  if (a == b)
+    return;
+
   if (head == 0) {
     head = malloc(sizeof(Step));
     head->a = a;
