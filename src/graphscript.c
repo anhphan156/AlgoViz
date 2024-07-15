@@ -6,30 +6,39 @@
 #include "script.h"
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 
-typedef struct al {
-  Particle p;
-  struct al *next;
-} AdjacencyList;
+typedef struct pl {
+  Particle *p;
+  struct pl *next;
+} ParticleList;
 
 #define NUM_PARTICLES 5
 
 Particle A, B, C;
-AdjacencyList particles[NUM_PARTICLES];
+Particle particles[NUM_PARTICLES];
+ParticleList *adjacency_list;
 
 void graphscript_init() {
   Vector2 center = {WIDTH / 2.0f, HEIGHT / 2.0f};
+
+  adjacency_list = malloc(sizeof(ParticleList) * NUM_PARTICLES);
 
   float angle = 6.28f / NUM_PARTICLES;
   float theta = 0.0f;
   float d = 50.0f;
   for (int i = 0; i < NUM_PARTICLES; i += 1) {
-    particles[i].p.pos =
+    particles[i].pos =
         (Vector2){d * cos(theta) + center.x, d * sin(theta) + center.y};
-    particles[i].p.invMass = 1.0f / 10.0f;
+    particles[i].invMass = 1.0f / 10.0f;
     theta += angle;
+  }
 
-    particles[i].next = &particles[(i + 1) % NUM_PARTICLES];
+  for (int i = 0; i < NUM_PARTICLES; i += 1) {
+    adjacency_list[i].p = &particles[i];
+    adjacency_list[i].next = malloc(sizeof(ParticleList));
+    adjacency_list[i].next->p = &particles[(i + 1) % NUM_PARTICLES];
+    adjacency_list[i].next->next = (void *)0;
   }
 
   /*A.invMass = 1.0f / 25.0f;*/
@@ -65,19 +74,32 @@ void graphscript_run() {
   /*integrate(&A);*/
   /*integrate(&B);*/
   /*integrate(&C);*/
+  for (int i = 0; i < NUM_PARTICLES; i += 1) {
+    ParticleList *ptr = adjacency_list + i;
+    ParticleList *cur = ptr;
+    while (ptr->next != 0) {
+      ptr = ptr->next;
+      // code goes here for making spring force
+      Vector2 f;
+      make_spring_force(cur->p->pos, ptr->p->pos, 0.05f, 10.0f, &f);
+      add_force(cur->p, f);
+    }
+
+    integrate(cur->p);
+  }
 }
 
 void graphscript_draw() {
   for (int i = 0; i < NUM_PARTICLES; i += 1) {
-    DrawCircle(particles[i].p.pos.x, particles[i].p.pos.y,
-               1.0f / particles[i].p.invMass, RED);
+    DrawCircle(particles[i].pos.x, particles[i].pos.y,
+               1.0f / particles[i].invMass, RED);
 
-    AdjacencyList *ptr = particles + i;
-    while (ptr->next != NULL) {
-
-      DrawLine(ptr->p.pos.x, ptr->p.pos.y, ptr->next->p.pos.x,
-               ptr->next->p.pos.y, BLACK);
+    ParticleList *ptr = adjacency_list + i;
+    ParticleList *cur = ptr;
+    while (ptr->next != 0) {
       ptr = ptr->next;
+      DrawLine(cur->p->pos.x, cur->p->pos.y, ptr->p->pos.x, ptr->p->pos.y,
+               BLACK);
     }
   }
 
@@ -94,7 +116,19 @@ void graphscript_draw() {
   /*DrawText(str, WIDTH / 2, 0, 32, RED);*/
 }
 
-void graphscript_cleanup() {}
+void graphscript_cleanup() {
+  ParticleList *tmp;
+  for (int i = 0; i < NUM_PARTICLES; i += 1) {
+    ParticleList *ptr = adjacency_list + i;
+    ptr = ptr->next;
+    while (ptr != NULL) {
+      tmp = ptr->next;
+      free(ptr);
+      ptr = tmp;
+    }
+  }
+  free(adjacency_list);
+}
 
 void graphscript_get_script(Script *s) {
   s->init = graphscript_init;
