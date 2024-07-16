@@ -5,6 +5,7 @@
 #include "particle.h"
 #include "raylib.h"
 #include "script.h"
+#include <float.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,10 +23,44 @@ int NUM_PARTICLES;
 Particle A, B, C;
 Particle *particles;
 ParticleList *adjacency_list;
+Particle *particle_on_mouse = NULL;
+float spring_k = 0.05f, drag_k = 5.0f;
 
 void graphscript_init() { adjacency_list_parser(); }
 
+void graphscript_input() {
+  Vector2 mouse_pos = (Vector2){GetMouseX(), GetMouseY()};
+  Vector2 particle_pos;
+  Vector2 d;
+  char str[100];
+  if (IsMouseButtonPressed(0)) {
+    mouse_pos = (Vector2){GetMouseX(), GetMouseY()};
+
+    if (particle_on_mouse == NULL) {
+      for (int i = 0; i < NUM_PARTICLES; i += 1) {
+        particle_pos = particles[i].pos;
+        d = (Vector2){particle_pos.x - mouse_pos.x,
+                      particle_pos.y - mouse_pos.y};
+
+        if (d.x * d.x + d.y * d.y < 100.0f) {
+          particle_on_mouse = particles + i;
+          break;
+        }
+      }
+    }
+  }
+  if (IsMouseButtonDown(0)) {
+    if (particle_on_mouse != NULL) {
+      particle_on_mouse->pos = mouse_pos;
+    }
+  }
+  if (IsMouseButtonReleased(0)) {
+    particle_on_mouse = NULL;
+  }
+}
+
 void graphscript_run() {
+  graphscript_input();
   /*Vector2 v = particles[0].vec;*/
   /*Vector2 a = particles[0].acc;*/
   /*float vm = v.x * v.x + v.y * v.y;*/
@@ -34,7 +69,6 @@ void graphscript_run() {
   /*  return;*/
   /*}*/
 
-  float spring_k = 0.05f, drag_k = 5.0f;
   Vector2 f;
   Particle *cur;
   ParticleList *adj;
@@ -72,6 +106,7 @@ void graphscript_draw() {
       ptr = ptr->next;
     }
   }
+  DrawFPS(10.0f, 10.0f);
 
   /*char str[25];*/
   /*Vector2 v = A.vec;*/
